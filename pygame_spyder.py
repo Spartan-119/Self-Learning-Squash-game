@@ -33,6 +33,7 @@ class Ball:
     def update(self, color):
         self.x = self.x + self.vx
         self.y = self.y + self.vy
+        self.show(fgColor)
 
 # Paddle class
 class Paddle:
