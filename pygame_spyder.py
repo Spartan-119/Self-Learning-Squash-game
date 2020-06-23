@@ -12,7 +12,7 @@ WIDTH = 1200
 HEIGHT = 600
 BORDER = 20
 VELOCITY_X = 1
-VELOCITY_Y = 1
+VELOCITY_Y = 0
 
 # defining the classes
 
