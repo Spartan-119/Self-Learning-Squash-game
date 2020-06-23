@@ -12,7 +12,7 @@ WIDTH = 1200
 HEIGHT = 600
 BORDER = 20
 VELOCITY_X = 1
-VELOCITY_Y = 0
+VELOCITY_Y = 1
 
 # defining the classes
 
@@ -33,17 +33,43 @@ class Ball:
     # function to move the ball
     def update(self):
         global bgColor, fgColor
-        self.show(bgColor)
-        self.x = self.x + self.vx
-        self.y = self.y + self.vy
-        self.show(fgColor)
+        
+        new_x = self.x + self.vx
+        new_y = self.y + self.vy
+        
+        # conditions to manage the collision of the ball with the border
+        if new_x < BORDER + self.RADIUS:
+            self.vx = -self.vx
+        
+        elif new_y < BORDER + self.RADIUS or new_y > HEIGHT - BORDER - self.RADIUS:
+            self.vy = -self.vy
+        
+        else:
+            self.show(bgColor)
+            self.x = self.x + self.vx
+            self.y = self.y + self.vy
+            self.show(fgColor)
 
 # Paddle class
 class Paddle:
-    pass
+    WIDTH = 20
+    HEIGHT = 100
+    
+    def __init__(self, y):
+        self.y = y
+    
+    def show(self, color):
+        global screen
+        pg.draw.rect(screen, color, pg.Rect(WIDTH - self.WIDTH, self.y - self.HEIGHT//2))
+    
+    def update(self):
+        self.show(pg.Color('Black'))
+        self.y = pg.mouse.get_pos()[1]
+        self.show(pg.Color('Yellow'))
 
 # creating objects
 ballPlay = Ball(WIDTH - Ball.RADIUS, HEIGHT//2, -VELOCITY_X, -VELOCITY_Y)
+paddle = Paddle(HEIGHT//2)
 
 pg.init()
 
@@ -59,6 +85,7 @@ pg.draw.rect(screen, fgColor, pg.Rect((0, HEIGHT - BORDER, WIDTH, BORDER)))
 
 # to display the console screen
 ballPlay.show(fgColor) # to show the ball
+paddle.show(fgColor)
 
 # to close the console
 while True:
@@ -68,5 +95,6 @@ while True:
     
     pg.display.flip()
     ballPlay.update()
+    paddle.update()
 
 pg.quit()
