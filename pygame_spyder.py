@@ -11,7 +11,8 @@ import pygame as pg
 WIDTH = 1200
 HEIGHT = 600
 BORDER = 20
-VELOCITY = -1
+VELOCITY_X = 1
+VELOCITY_Y = 1
 
 # defining the classes
 
@@ -30,7 +31,9 @@ class Ball:
         pg.draw.circle(screen, color, (self.x, self.y), self.RADIUS)
         
     # function to move the ball
-    def update(self, color):
+    def update(self):
+        global bgColor, fgColor
+        self.show(bgColor)
         self.x = self.x + self.vx
         self.y = self.y + self.vy
         self.show(fgColor)
@@ -40,12 +43,13 @@ class Paddle:
     pass
 
 # creating objects
-ballPlay = Ball(WIDTH - Ball.RADIUS, HEIGHT//2, VELOCITY, 0)
+ballPlay = Ball(WIDTH - Ball.RADIUS, HEIGHT//2, -VELOCITY_X, -VELOCITY_Y)
 
 pg.init()
 
 screen = pg.display.set_mode((WIDTH, HEIGHT))
 
+bgColor = pg.Color('Black')
 fgColor = pg.Color('Yellow')
 
 # drawing the borders
@@ -63,6 +67,6 @@ while True:
         break
     
     pg.display.flip()
-    ballPlay.update(fgColor)
+    ballPlay.update()
 
 pg.quit()
