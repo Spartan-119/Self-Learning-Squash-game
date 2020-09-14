@@ -12,7 +12,7 @@ fgcolor = pg.Color("White")
 ball_color = pg.Color("Yellow")
 paddle_color = pg.Color("Green")
 VELOCITY = 5
-FRAMERATE = 60
+FRAMERATE = 120
 clock = pg.time.Clock()
 
 
@@ -37,7 +37,7 @@ class Ball:
         asper the command given by an input device 
         (in this case it is Mouse cursor)'''
     # method to update the position of the Ball
-    def update(self): #, paddle_y, paddle_WIDTH, paddle_HEIGHT):
+    def update(self, paddle_y, paddle_WIDTH, paddle_HEIGHT): #, paddle_y, paddle_WIDTH, paddle_HEIGHT):
         newx = self.x + self.vx
         newy = self.y + self.vy
         
@@ -48,12 +48,19 @@ class Ball:
             and (newx + self.RADIUS >= WIDTH - paddle_WIDTH or newx - self.RADIUS <= Paddle.WIDTH):
             self.vx = - self.vx'''
         
+        ''' for along the X axis '''
         if newx < BORDER + self.RADIUS: #or newx > HEIGHT - BORDER - self.RADIUS:
             self.vx = - self.vx
         
         ''' for along the Y axis '''
         if newy < BORDER + self.RADIUS or newy > HEIGHT - BORDER - self.RADIUS:
             self.vy = - self.vy
+                
+        ''' logic to bounce off the ball when it hits the paddle '''
+        if newx >= WIDTH - paddle_WIDTH: #and newx - self.RADIUS <= Paddle.WIDTH:
+            self.vx = -self.vx
+        
+        
                     
         # to show the moving ball
         self.show(bgcolor)
@@ -108,8 +115,8 @@ while True:
     if e.type == pg.QUIT:
         break
     
-    ball.update() #paddle.y, paddle.WIDTH, paddle.HEIGHT)
-    paddle.update(pg.mouse.get_pos()[1],0)
+    ball.update(paddle.y, paddle.WIDTH, paddle.HEIGHT) #paddle.y, paddle.WIDTH, paddle.HEIGHT)
+    paddle.update(pg.mouse.get_pos()[1], WIDTH-BORDER)
     
     ''' This method should be called once per frame. It will compute how many 
         milliseconds have passed since the previous call.
